@@ -269,6 +269,7 @@ def collect_reviews(
     save_to_disk: bool,
     progress_bar,
     log_placeholder,
+    on_update=render_metrics,
 ) -> None:
     ui_log(f"Начало сбора отзывов для App ID: {app_id} (витрина: {country})")
 
@@ -333,6 +334,9 @@ def collect_reviews(
     st.session_state.stats["found"] += total_found
     st.session_state.stats["russian"] += total_russian
     st.session_state.stats["skipped"] += total_skipped_non_ru
+
+    if on_update:
+            on_update()
 
     ui_log(
         f"Сбор завершён. Просмотрено: {total_found}, "
