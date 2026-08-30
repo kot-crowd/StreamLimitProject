@@ -269,7 +269,7 @@ def collect_reviews(
     save_to_disk: bool,
     progress_bar,
     log_placeholder,
-    on_update=render_metrics,
+    on_update=None,
 ) -> None:
     ui_log(f"Начало сбора отзывов для App ID: {app_id} (витрина: {country})")
 
