@@ -392,10 +392,16 @@ with col1:
     start_clicked = st.button("▶️ Начать сбор отзывов", type="primary", disabled=st.session_state.is_running)
 
 with col2:
-    m1, m2, m3 = st.columns(3)
-    m1.metric("Всего просмотрено", st.session_state.stats["found"])
-    m2.metric("Добавлено русских", st.session_state.stats["russian"])
-    m3.metric("Пропущено (не рус.)", st.session_state.stats["skipped"])
+    metric_placeholder = st.empty()
+
+def render_metrics():
+    with metric_placeholder.container():
+        m1, m2, m3 = st.columns(3)
+        m1.metric("Всего просмотрено", st.session_state.stats["found"])
+        m2.metric("Добавлено русских", st.session_state.stats["russian"])
+        m3.metric("Пропущено (не рус.)", st.session_state.stats["skipped"])
+
+render_metrics()  # первичная отрисовка (например, с нулями или с прошлыми значениями)
 
 progress_bar = st.progress(0.0)
 log_placeholder = st.empty()
@@ -422,11 +428,13 @@ if start_clicked:
                     progress_bar=progress_bar,
                     log_placeholder=log_placeholder,
                 )
+            render_metrics()  # <-- обязательно обновляем метрики после сбора
         except Exception as e:
             ui_log(f"Критическая ошибка во время выполнения: {e}", "error")
             st.error(f"Критическая ошибка: {e}")
         finally:
             st.session_state.is_running = False
+            render_metrics()  # <-- на всякий случай обновим и в finally
 
 st.divider()
 st.subheader("Собранные отзывы")
