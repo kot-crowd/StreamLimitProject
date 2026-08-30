@@ -273,6 +273,8 @@ def collect_reviews(
 ) -> None:
     ui_log(f"Начало сбора отзывов для App ID: {app_id} (витрина: {country})")
 
+    st.session_state.stats = {"found": 0, "russian": 0, "skipped": 0}
+    
     seen_keys = st.session_state.seen_keys
     all_reviews = st.session_state.reviews
     had_existing = bool(all_reviews)
